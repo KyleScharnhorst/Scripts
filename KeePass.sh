@@ -32,6 +32,7 @@ if [ "$1" == "$RUN_ACTION" ]; then
 elif [ "$1" == "$COPY_ACTION" ]; then
 	if [ ! -d $PORTABLE_KEY_PASS_DIR ]; then
 		echo Portable KeePass location not found.
+		exit 1
 	fi
 
 	if [ -f $COPY_BACKUP_FILE_PATH ]; then
