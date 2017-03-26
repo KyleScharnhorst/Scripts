@@ -12,7 +12,7 @@ COPY_BACKUP_FILE_PATH=$PORTABLE_KEY_PASS_DIR/$COPY_BACKUP_FILE
 function print_usage () {
 	echo Usage: $0 \<$RUN_ACTION\|$COPY_ACTION\>
 	echo run: runs main KeePass.
-	echo copy: copies main KeePass to portable KeePass location (creates portable KeePass backup).
+	echo copy: copies main KeePass to portable KeePass location \(creates portable KeePass backup\).
 	echo Example: $0 $RUN_ACTION
 	echo Example: $0 $COPY_ACTION
 	exit 1
