@@ -13,12 +13,13 @@ COPY_BACKUP_FILE_PATH=$PORTABLE_KEY_PASS_DIR/$COPY_BACKUP_FILE
 SCRIPT_LOC=$(dirname $0)
 
 function print_usage () {
-	echo Usage: $0 \<$RUN_ACTION\|$COPY_ACTION\|$EJECT_ACTION\>
+	echo Usage: $0 \<$RUN_ACTION\|$COPY_ACTION [$EJECT_ACTION]\|$EJECT_ACTION\>
 	echo $RUN_ACTION: runs main KeePass.
 	echo $COPY_ACTION: copies main KeePass to portable KeePass location \(creates portable KeePass backup\).
 	echo $EJECT_ACTION: ejects the portable KeePass location.
 	echo Example: $0 $RUN_ACTION
 	echo Example: $0 $COPY_ACTION
+	echo Example: $0 $COPY_ACTION $EJECT_ACTION
 	echo Example: $0 $EJECT_ACTION
 	exit 1
 }
@@ -30,7 +31,15 @@ function check_portable_loc () {
 	fi
 }
 
-if [ "$#" -ne 1 ]; then
+function perform_eject () {
+	check_portable_loc
+	echo Attempting to eject portable drive...
+	$SCRIPT_LOC/RemoveDrive.exe $PORTABLE_DRIVE_LETTER: -l
+	echo Ensuring drive was ejected...
+	check_portable_loc
+}
+
+if [ "$#" -ne 1 ] && [ "$#" -ne 2 ]; then
 	print_usage
 fi
 
@@ -54,12 +63,12 @@ elif [ "$1" == "$COPY_ACTION" ]; then
 
 	echo Copying main KeePass to portable location.
 	cp -v --update --recursive $MAIN_KEE_PASS_PATH/* $PORTABLE_KEY_PASS_DIR
+
+	if [ "$2" == "$EJECT_ACTION" ]; then
+		perform_eject
+	fi
 elif [ "$1" == "$EJECT_ACTION" ]; then
-	check_portable_loc
-    echo Attempting to eject portable drive...
-	$SCRIPT_LOC/RemoveDrive.exe $PORTABLE_DRIVE_LETTER: -l
-    echo Ensuring drive was ejected...
-    check_portable_loc
+	perform_eject
 else
 	echo Action: "$1" not recognized.
 	print_usage
