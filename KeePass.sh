@@ -26,7 +26,7 @@ function print_usage () {
 
 function check_portable_loc () {
 	if [ ! -d $PORTABLE_KEY_PASS_DIR ]; then
-		echo Portable KeePass location not found.
+		echo Portable KeePass location not found: $PORTABLE_KEY_PASS_DIR
 		exit 1
 	fi
 }
